@@ -81,30 +81,9 @@ tmp<volScalarField> mySpalartAllmarasDDES<BasicTurbulenceModel>::fd
 
         const volScalarField alphaExp(max(-1.0,min(1.0,7.0-GOmega/invGOmega))); //està acotada entre -1 i 1
         const volScalarField exponent(max(-30.0,min(30.0,-6.0*alphaExp/max(1e-14, 1.0-pow(alphaExp,2.0)))));
-/*
-        const volScalarField shield	
-        (
-            IOobject
-            (
-                    "shield",
-                    this->runTime_.timeName(),
-                    this->mesh_,
-                    IOobject::NO_READ,
-                    IOobject::AUTO_WRITE
-            ),
-            fD(rval)-(fD(rval)-fD(Gr)*fD(Beta_*rval))*1.0/(1.0+exp(exponent))
-        );
-*/
 
 	const volScalarField normVortGrad (fvc::grad(vorticityMag) & n);
 
-        if(this->runTime_.outputTime())
-        {
-	    magGradU.write();
-	    normVortGrad.write();
-	    GOmega.write();
-//            shield.write();
-        }
         Info << "Deck shielding applied" << endl;
 	
         return fD(rval)-(fD(rval)-fD(Gr)*fD(Beta_*rval))*1.0/(1.0+exp(exponent));
